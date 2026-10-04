@@ -1,17 +1,21 @@
 import js from '@eslint/js';
 import globals from 'globals';
-import { defineConfig } from 'eslint/config';
 import eslintConfigPrettier from 'eslint-config-prettier';
 
-export default defineConfig([
+export default [
   js.configs.recommended,
   eslintConfigPrettier,
   {
     files: ['src/**/*.js'],
-    plugins: { js },
-    extends: ['js/recommended'],
-    languageOptions: { globals: globals.browser },
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.browser,
+      },
+    },
     rules: {
+      'no-undef': 'error',
       'no-unused-vars': 'warn',
       semi: ['error', 'always'],
       quotes: ['error', 'single'],
@@ -21,10 +25,14 @@ export default defineConfig([
   {
     files: ['vite.config.js', '*.config.js'],
     languageOptions: {
-      globals: { ...globals.node },
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+      },
     },
   },
   {
     ignores: ['dist/**', 'node_modules/**'],
   },
-]);
+];
