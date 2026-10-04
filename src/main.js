@@ -1,9 +1,6 @@
-import './style.css';
+import '@/style.css';
+import { initApp } from '@/app.js';
 
-const app = document.querySelector('#app');
-
-if (!app) {
-  console.log('There is no any app container');
-} else {
-  app.textContent = 'App in progress...';
-}
+document.addEventListener('DOMContentLoaded', () => {
+  initApp();
+});
