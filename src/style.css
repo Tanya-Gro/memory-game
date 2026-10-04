@@ -1,3 +1,5 @@
+@import url('@/styles/modal.css');
+
 * {
   box-sizing: border-box;
 }
@@ -46,6 +48,20 @@ body {
   transition:
     background-color 0.2s ease,
     transform 0.1s ease;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-close-modal {
+  background-color: #95a5a6;
+  color: white;
+  align-self: flex-end;
+}
+
+.btn-close-modal:hover {
+  background-color: #7f8c8d;
 }
 
 .game-container {
