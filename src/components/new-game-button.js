@@ -1,5 +1,4 @@
 import { getElementButton } from '@/utils/get-element';
-import { startNewGame } from '@/utils/start-new-game';
 
 export const newGameButton = (onClick) =>
   getElementButton({
