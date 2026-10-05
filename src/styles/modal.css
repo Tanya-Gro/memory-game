@@ -70,7 +70,7 @@ body.modal-open {
 .modal-leaderboard-content h2 {
   margin: 0;
   text-align: center;
-  color: #2c3e50;
+  color: var(--card-front-text);
 }
 
 .leaderboard-empty {
@@ -83,7 +83,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  background-color: #f8f9fa;
+  background-color: var(--table-bg);
   border-radius: 6px;
   border: 1px solid #e2e8f0;
   overflow: hidden;
@@ -91,7 +91,7 @@ body.modal-open {
 
 .leaderboard-row {
   display: grid;
-  grid-template-columns: 80px 1fr 120px;
+  grid-template-columns: 60px 1fr 80px 100px;
   padding: 10px 15px;
   border-bottom: 1px solid #e2e8f0;
   place-items: center center;
@@ -109,7 +109,7 @@ body.modal-open {
 
 .leaderboard-rank {
   font-weight: bold;
-  color: #718096;
+  color: var(--tank-text);
 }
 
 .leaderboard-moves {

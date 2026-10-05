@@ -105,6 +105,7 @@ export function showLeaderboardModal() {
           children: [
             getElementSpan({ text: 'Место' }),
             getElementSpan({ text: 'Количество ходов' }),
+            getElementSpan({ text: 'Время' }),
             getElementSpan({ text: 'Дата игры' }),
           ],
         }),
@@ -119,6 +120,10 @@ export function showLeaderboardModal() {
               getElementSpan({
                 classes: 'leaderboard-moves',
                 text: `${score.moves}`,
+              }),
+              getElementSpan({
+                classes: 'leaderboard-moves',
+                text: score.timeStr,
               }),
               getElementSpan({ classes: 'leaderboard-date', text: score.date }),
             ],

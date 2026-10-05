@@ -1,2 +1,33 @@
 @import url('@/styles/main.css');
 @import url('@/styles/modal.css');
+@import url('@/styles/theme.css');
+
+:root {
+  --bg-color: #f4f6f9;
+  --logo-color: #2c3e50;
+  --text-color: #333333;
+  --panel-bg: #ffffff;
+  --card-front-border: #3498db;
+  --panel-shadow: rgb(0 0 0 / 20%);
+  --card-front-text: #2c3e50;
+  --table-bg: #f8f9fa;
+  --tank-text: #718096;
+  --card-back-bg: #2c3e50;
+  --card-back-text: #ffffff;
+  --card-front-bg: #ffffff;
+}
+
+body.dark {
+  --bg-color: #1a1a24;
+  --text-color: #f5f6fa;
+  --logo-color: #ecf0f1;
+  --panel-bg: #353542;
+  --panel-shadow: rgb(160 160 160 / 30%);
+  --table-bg: #3e3e4d;
+  --tank-text: #bac8dd;
+  --card-back-bg: #3d3d5c;
+  --card-back-text: #a5a5c5;
+  --card-front-bg: #2a2a3a;
+  --card-front-border: #9b59b6;
+  --card-front-text: #ecf0f1;
+}

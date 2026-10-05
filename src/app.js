@@ -6,6 +6,7 @@ import {
   getElementH1,
 } from '@/utils/get-element.js';
 import { showLeaderboardModal, showWinModal } from '@/components/modal.js';
+import { createThemeToggle, initTheme } from '@/components/theme';
 import { newGameButton } from '@/components/new-game-button';
 import { initBoardController, startNewGame } from '@/utils/start-new-game';
 import { GameState } from '@/state/game-state.js';
@@ -18,6 +19,7 @@ const gameState = new GameState(updateCountersUI, (moves, time) =>
 export function initApp() {
   const root = document.body;
   root.textContent = '';
+  initTheme();
   initBoardController(gameState);
 
   getElementHeader({
@@ -34,6 +36,7 @@ export function initApp() {
             text: 'Таблица лидеров',
             events: { click: showLeaderboardModal },
           }),
+          createThemeToggle(),
         ],
       }),
     ],
