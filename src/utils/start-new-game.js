@@ -1,28 +1,39 @@
-import { gameState } from '@/state/game-state.js';
 import { getElementDiv } from '@/utils/get-element.js';
 
+let localGameState = null;
+
+export function initBoardController(gameStateInstance) {
+  localGameState = gameStateInstance;
+}
+
 export function startNewGame() {
-  gameState.initGame();
+  if (!localGameState) return;
+  localGameState.initGame();
   renderCards();
 }
 
 function renderCards() {
   const board = document.querySelector('.game-board');
+  if (!board) return;
   board.textContent = '';
 
-  gameState.cards.forEach((cardData) => {
+  localGameState.cards.forEach((cardData) => {
     getElementDiv({
       classes: 'card',
       parent: board,
       attributes: { 'data-id': cardData.id },
       events: {
         click: () => {
-          gameState.handleCardClick(cardData.id, updateCardAppearance);
+          localGameState.handleCardClick(cardData.id, updateCardAppearance);
         },
       },
       children: [
         getElementDiv({ classes: 'card-front', text: cardData.value }),
-        getElementDiv({ classes: 'card-back', text: '?' }),
+        getElementDiv({
+          classes: 'card-back',
+          text: '?',
+          attributes: { 'aria-label': 'Скрытая карточка' },
+        }),
       ],
     });
   });

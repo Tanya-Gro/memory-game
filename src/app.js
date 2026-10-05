@@ -5,13 +5,21 @@ import {
   getElementSpan,
   getElementH1,
 } from '@/utils/get-element.js';
-import { showLeaderboardModal } from '@/components/modal.js';
+import { showLeaderboardModal, showWinModal } from '@/components/modal.js';
 import { newGameButton } from '@/components/new-game-button';
-import { startNewGame } from '@/utils/start-new-game';
+import { initBoardController, startNewGame } from '@/utils/start-new-game';
+import { GameState } from '@/state/game-state.js';
+import { updateCountersUI } from '@/utils/updateUI.js';
+
+const gameState = new GameState(updateCountersUI, (moves, time) =>
+  showWinModal(moves, time, startNewGame)
+);
 
 export function initApp() {
   const root = document.body;
   root.textContent = '';
+  initBoardController(gameState);
+
   getElementHeader({
     classes: 'header',
     parent: root,
@@ -24,7 +32,7 @@ export function initApp() {
           getElementButton({
             classes: 'btn btn-leaderboard',
             text: 'Таблица лидеров',
-            events: { click: () => showLeaderboardModal() },
+            events: { click: showLeaderboardModal },
           }),
         ],
       }),
@@ -52,6 +60,13 @@ export function initApp() {
             children: [
               getElementSpan({ text: 'Найденные пары: ' }),
               getElementSpan({ classes: 'stat-count-pairs', text: '0 / 8' }),
+            ],
+          }),
+          getElementDiv({
+            classes: 'stat-item',
+            children: [
+              getElementSpan({ text: 'Время: ' }),
+              getElementSpan({ classes: 'stat-count-time', text: '00:00' }),
             ],
           }),
         ],
