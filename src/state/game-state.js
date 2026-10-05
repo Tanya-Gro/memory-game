@@ -1,3 +1,5 @@
+import { shuffle } from '@/utils/shuffie-array';
+
 const CARD_IMAGES = ['🦁', '🦊', '🦝', '🐱', '🐼', '🐨', '🐸', '🐙'];
 const DOUBLE_CARDS = [...CARD_IMAGES, ...CARD_IMAGES];
 
@@ -19,16 +21,6 @@ export class GameState {
     this.isGameStarted = false;
   }
 
-  // Алгоритм тасования Фишера — Йейта
-  shuffle(array) {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-  }
-
   initGame() {
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
@@ -45,7 +37,7 @@ export class GameState {
     this.selectedCards = [];
     this.isLocked = false;
 
-    const shuffledValues = this.shuffle(DOUBLE_CARDS);
+    const shuffledValues = shuffle(DOUBLE_CARDS);
 
     this.cards = shuffledValues.map((value, index) => ({
       id: index,
