@@ -8,13 +8,18 @@ import {
 import { newGameButton } from './new-game-button';
 
 class Modal {
-  constructor() {
+  constructor(gameStateInstance) {
+    this.gameState = gameStateInstance;
     this.overlay = null;
     this.escapeHandler = this.handleEscape.bind(this);
   }
 
   open(contentElement) {
     document.body.classList.add('modal-open');
+
+    if (this.gameState && typeof this.gameState.pauseTimer === 'function') {
+      this.gameState.pauseTimer();
+    }
 
     const closeCrossButton = getElementButton({
       classes: 'btn-close-cross',
@@ -52,6 +57,10 @@ class Modal {
     this.overlay = null;
 
     document.body.classList.remove('modal-open');
+
+    if (this.gameState && typeof this.gameState.pauseTimer === 'function') {
+      this.gameState.resumeTimer();
+    }
   }
 
   handleEscape(e) {
@@ -62,7 +71,7 @@ class Modal {
 }
 
 export function showWinModal(finalMoves, time, onRestart) {
-  const currentModal = new Modal();
+  const currentModal = new Modal(null);
   const winContent = getElementDiv({
     classes: 'modal-win-content',
     children: [
@@ -85,10 +94,10 @@ export function showWinModal(finalMoves, time, onRestart) {
   currentModal.open(winContent);
 }
 
-export function showLeaderboardModal() {
+export function showLeaderboardModal(gameStateInstance) {
   const scores = JSON.parse(localStorage.getItem('memory-game-scores')) || [];
 
-  const currentModal = new Modal();
+  const currentModal = new Modal(gameStateInstance);
   let leaderboardBody;
 
   if (scores.length === 0) {

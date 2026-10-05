@@ -16,6 +16,7 @@ export class GameState {
     this.seconds = 0;
     this.timerId = null;
     this.isTimerRunning = false;
+    this.isGameStarted = false;
   }
 
   // Алгоритм тасования Фишера — Йейта
@@ -37,6 +38,7 @@ export class GameState {
     this.stopTimer();
     this.seconds = 0;
     this.isTimerRunning = false;
+    this.isGameStarted = false;
 
     this.moves = 0;
     this.matchedPairs = 0;
@@ -62,6 +64,7 @@ export class GameState {
   startTimer() {
     if (this.timerId) clearInterval(this.timerId);
     this.isTimerRunning = true;
+    this.isGameStarted = true;
     this.timerId = setInterval(() => {
       this.seconds++;
       this.onStateChange({
@@ -72,12 +75,27 @@ export class GameState {
     }, 1000);
   }
 
+  pauseTimer() {
+    if (this.timerId) {
+      clearInterval(this.timerId);
+      this.timerId = null;
+    }
+    this.isTimerRunning = false;
+  }
+
+  resumeTimer() {
+    if (this.isGameStarted && !this.isTimerRunning && this.matchedPairs < 8) {
+      this.startTimer();
+    }
+  }
+
   stopTimer() {
     if (this.timerId) {
       clearInterval(this.timerId);
       this.timerId = null;
     }
     this.isTimerRunning = false;
+    this.isGameStarted = false;
   }
 
   getFormattedTime() {

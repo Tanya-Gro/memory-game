@@ -34,7 +34,7 @@ export function initApp() {
           getElementButton({
             classes: 'btn btn-leaderboard',
             text: 'Таблица лидеров',
-            events: { click: showLeaderboardModal },
+            events: { click: () => showLeaderboardModal(gameState) },
           }),
           createThemeToggle(),
         ],
