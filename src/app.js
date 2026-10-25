@@ -10,11 +10,16 @@ import { createThemeToggle, initTheme } from '@/components/theme';
 import { newGameButton } from '@/components/new-game-button';
 import { initBoardController, startNewGame } from '@/utils/start-new-game';
 import { GameState } from '@/state/game-state.js';
-import { updateCountersUI } from '@/utils/updateUI.js';
+import { updateCountersUI } from '@/utils/update-counters-ui.js';
+import { Timer } from '@/utils/timer';
+import { updateTimerUI } from '@/utils/update-timer-ui';
 
-const gameState = new GameState(updateCountersUI, (moves, time) =>
-  showWinModal(moves, time, startNewGame)
-);
+const timer = new Timer();
+const gameState = new GameState(timer);
+
+gameState.on('change', updateCountersUI);
+timer.on('tick', updateTimerUI);
+gameState.on('win', (data) => showWinModal(data.time, data.time, startNewGame));
 
 export function initApp() {
   const root = document.body;
@@ -34,7 +39,9 @@ export function initApp() {
           getElementButton({
             classes: 'btn btn-leaderboard',
             text: 'Таблица лидеров',
-            events: { click: () => showLeaderboardModal(gameState) },
+            events: {
+              click: () => showLeaderboardModal(timer),
+            },
           }),
           createThemeToggle(),
         ],

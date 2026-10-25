@@ -1,12 +1,15 @@
+import { EventEmitter } from '@/utils/event-emitter';
+import { getFormattedTime } from '@/utils/format-time';
 import { shuffle } from '@/utils/shuffie-array';
 
 const CARD_IMAGES = ['🦁', '🦊', '🦝', '🐱', '🐼', '🐨', '🐸', '🐙'];
 const DOUBLE_CARDS = [...CARD_IMAGES, ...CARD_IMAGES];
 
-export class GameState {
-  constructor(onStateChange, onGameWin) {
-    this.onStateChange = onStateChange;
-    this.onGameWin = onGameWin;
+export class GameState extends EventEmitter {
+  constructor(timerInstance) {
+    super();
+
+    this.timer = timerInstance;
 
     this.cards = [];
     this.moves = 0;
@@ -14,11 +17,13 @@ export class GameState {
     this.selectedCards = [];
     this.isLocked = false;
     this.timeoutId = null;
+  }
 
-    this.seconds = 0;
-    this.timerId = null;
-    this.isTimerRunning = false;
-    this.isGameStarted = false;
+  emitStateChange() {
+    this.emit('change', {
+      moves: this.moves,
+      pairs: this.matchedPairs,
+    });
   }
 
   initGame() {
@@ -27,10 +32,8 @@ export class GameState {
       this.timeoutId = null;
     }
 
-    this.stopTimer();
-    this.seconds = 0;
-    this.isTimerRunning = false;
-    this.isGameStarted = false;
+    this.timer.pause();
+    this.timer.reset();
 
     this.moves = 0;
     this.matchedPairs = 0;
@@ -38,62 +41,14 @@ export class GameState {
     this.isLocked = false;
 
     const shuffledValues = shuffle(DOUBLE_CARDS);
-
-    this.cards = shuffledValues.map((value, index) => ({
-      id: index,
-      value: value,
+    this.cards = shuffledValues.map((val, ind) => ({
+      id: ind,
+      value: val,
       isFlipped: false,
       isMatched: false,
     }));
 
-    this.onStateChange({
-      moves: this.moves,
-      pairs: this.matchedPairs,
-      time: this.getFormattedTime(),
-    });
-  }
-
-  startTimer() {
-    if (this.timerId) clearInterval(this.timerId);
-    this.isTimerRunning = true;
-    this.isGameStarted = true;
-    this.timerId = setInterval(() => {
-      this.seconds++;
-      this.onStateChange({
-        moves: this.moves,
-        pairs: this.matchedPairs,
-        time: this.getFormattedTime(),
-      });
-    }, 1000);
-  }
-
-  pauseTimer() {
-    if (this.timerId) {
-      clearInterval(this.timerId);
-      this.timerId = null;
-    }
-    this.isTimerRunning = false;
-  }
-
-  resumeTimer() {
-    if (this.isGameStarted && !this.isTimerRunning && this.matchedPairs < 8) {
-      this.startTimer();
-    }
-  }
-
-  stopTimer() {
-    if (this.timerId) {
-      clearInterval(this.timerId);
-      this.timerId = null;
-    }
-    this.isTimerRunning = false;
-    this.isGameStarted = false;
-  }
-
-  getFormattedTime() {
-    const mins = String(Math.floor(this.seconds / 60)).padStart(2, '0');
-    const secs = String(this.seconds % 60).padStart(2, '0');
-    return `${mins}:${secs}`;
+    this.emitStateChange();
   }
 
   handleCardClick(cardId, updateCardUI) {
@@ -101,8 +56,8 @@ export class GameState {
 
     if (this.isLocked || card.isFlipped || card.isMatched) return;
 
-    if (!this.isTimerRunning) {
-      this.startTimer();
+    if (!this.timer.isRunning) {
+      this.timer.start();
     }
 
     card.isFlipped = true;
@@ -112,11 +67,7 @@ export class GameState {
     if (this.selectedCards.length === 1) return;
 
     this.moves++;
-    this.onStateChange({
-      moves: this.moves,
-      pairs: this.matchedPairs,
-      time: this.getFormattedTime(),
-    });
+    this.emitStateChange();
 
     this.checkMatch(updateCardUI);
   }
@@ -130,19 +81,18 @@ export class GameState {
       this.matchedPairs++;
 
       this.selectedCards = [];
-      this.onStateChange({
-        moves: this.moves,
-        pairs: this.matchedPairs,
-        time: this.getFormattedTime(),
-      });
+      this.emitStateChange();
 
       updateCardUI(card1.id, 'match');
       updateCardUI(card2.id, 'match');
 
       if (this.matchedPairs === 8) {
-        this.stopTimer();
+        this.timer.pause();
         this.saveResult();
-        this.onGameWin(this.moves, this.getFormattedTime());
+        this.emit('win', {
+          moves: this.moves,
+          time: getFormattedTime(this.timer.seconds),
+        });
       }
     } else {
       this.isLocked = true;
@@ -173,8 +123,8 @@ export class GameState {
 
     scores.push({
       moves: this.moves,
-      timeStr: this.getFormattedTime(),
-      rawSeconds: this.seconds,
+      timeStr: getFormattedTime(this.timer.seconds),
+      rawSeconds: this.timer.seconds,
       date: dateStr,
     });
 
