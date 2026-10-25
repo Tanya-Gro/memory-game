@@ -38,11 +38,10 @@ export function createThemeToggle() {
   });
   getElementSpan({ classes: 'sun-beams', parent: sunIcon });
 
-  const moonIcon = getElementSpan({
+  getElementSpan({
     classes: 'toggle-icon icon-moon',
     parent: toggleBtn,
   });
-  getElementSpan({ classes: 'moon-crater', parent: moonIcon });
 
   getElementSpan({ classes: 'toggle-thumb', parent: toggleBtn });
 
