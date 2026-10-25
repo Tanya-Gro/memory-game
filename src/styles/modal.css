@@ -1,0 +1,124 @@
+body.modal-open {
+  overflow: hidden;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(0 0 0 / 60%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-window {
+  position: relative;
+  background-color: var(--panel-bg, #ffffff);
+  color: var(--text-color, #333333);
+  padding: 40px 30px 30px;
+  border-radius: 8px;
+  box-shadow: var(--panel-shadow, 0 4px 15px rgb(0 0 0 / 30%));
+  max-width: 500px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.btn-close-cross {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  color: #888888;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+  z-index: 1010;
+}
+
+.btn-close-cross:hover {
+  color: #e74c3c;
+  transform: scale(1.1);
+}
+
+.btn-close-cross:active {
+  transform: scale(0.95);
+}
+
+.modal-win-content,
+.modal-leaderboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-win-content p {
+  margin: 0;
+}
+
+.modal-leaderboard-content h2 {
+  margin: 0;
+  text-align: center;
+  color: var(--card-front-text);
+}
+
+.leaderboard-empty {
+  text-align: center;
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+.leaderboard-table {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: var(--table-bg);
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.leaderboard-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 80px 100px;
+  padding: 10px 15px;
+  border-bottom: 1px solid #e2e8f0;
+  place-items: center center;
+}
+
+.leaderboard-row:last-child {
+  border-bottom: none;
+}
+
+.leaderboard-header {
+  background-color: #ebedf0;
+  font-weight: bold;
+  color: #4a5568;
+}
+
+.leaderboard-rank {
+  font-weight: bold;
+  color: var(--tank-text);
+}
+
+.leaderboard-moves {
+  font-weight: 600;
+  color: #2b6cb0;
+}
+
+.leaderboard-date {
+  color: #a0aec0;
+  font-size: 0.9rem;
+  text-align: right;
+}

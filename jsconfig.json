@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "checkJs": true,
+    "target": "es5",
+    "lib": ["es2017", "dom"]
+  },
+  "include": ["src/**/*"]
+}
